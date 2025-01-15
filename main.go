@@ -9,7 +9,6 @@ var toolboxes = []string{
     "Signal Processing Toolbox",
     "Optimization Toolbox",
     "Deep Learning Toolbox",
-    "Computer Vision Toolbox",
 }
 
 func main() {
