@@ -12,6 +12,7 @@ var toolboxes = []string{
     "Image Acquisition Toolbox",
     "Parallel Computing Toolbox",
     "Computer Vision Toolbox",
+    "Instrument Control Toolbox",
 }
 
 func main() {
