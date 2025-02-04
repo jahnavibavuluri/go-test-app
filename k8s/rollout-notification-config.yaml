@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rollout-notification-config
+  namespace: default
+data:
+  config.yaml: |
+    receivers:
+      - name: webhook
+        webhook:
+          url: http://webhook.argo-events.svc.cluster.local:12000/example
+    templates:
+      - name: rollout-completed
+        title: Rollout Completed
+        message: "Rollout {{.rollout.metadata.name}} has successfully completed."
+    triggers:
+      - name: on-rollout-completed
+        template: rollout-completed
+        when: success
+        receiver: webhook

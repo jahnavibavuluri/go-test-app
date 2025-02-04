@@ -3,6 +3,8 @@ kind: Rollout
 metadata:
   name: go-test-app
   namespace: default
+  annotations:
+    argo-rollouts.argoproj.io/notification: "webhook"
 spec:
   replicas: 3
   strategy:
