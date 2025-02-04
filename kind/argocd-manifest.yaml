@@ -10,7 +10,7 @@ spec:
     targetRevision: HEAD
     path: kind
   destination:
-    server: 'https://kubernetes.default.svc'
+    server: 'https://127.0.0.1:33755'
     namespace: default
   syncPolicy:
     automated: {}
