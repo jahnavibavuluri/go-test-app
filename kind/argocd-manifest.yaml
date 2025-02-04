@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: toolboxes-kind
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/jahnavibavuluri/go-test-app.git'
+    targetRevision: HEAD
+    path: kind
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: default
+  syncPolicy:
+    automated: {}
