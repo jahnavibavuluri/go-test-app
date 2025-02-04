@@ -13,6 +13,7 @@ var toolboxes = []string{
     "Parallel Computing Toolbox",
     "Computer Vision Toolbox",
     "Instrument Control Toolbox",
+    "MATLAB Compiler",
 }
 
 func main() {
