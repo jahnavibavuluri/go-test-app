@@ -11,7 +11,7 @@ spec:
     path: prod-cluster
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: default
+    namespace: prod-cluster
   syncPolicy:
     automated:
       prune: true

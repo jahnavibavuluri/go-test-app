@@ -11,7 +11,7 @@ spec:
     path: jlp-cluster
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: default
+    namespace: jlp-cluster
   syncPolicy:
     automated:
       prune: true
