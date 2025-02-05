@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rollout-monitor-job
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+      - name: rollout-monitor
+        image: bitnami/kubectl:latest
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            ROLLOUT_NAME="go-test-app-jlp"
+            NAMESPACE="default"
+            EVENT_SOURCE_URL="http://rollout-events.argo-events:12000/rollout-success"
+
+            while true; do
+              status=$(kubectl argo rollouts status $ROLLOUT_NAME -n $NAMESPACE)
+              echo "$status"
+              if [[ $status == *"Healthy"* ]]; then
+                curl -X POST $EVENT_SOURCE_URL -H "Content-Type: application/json" -d '{"status":"success"}'
+                break
+              fi
+              sleep 10
+            done
+      restartPolicy: Never
+  backoffLimit: 4
