@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
       - name: rollout-monitor
-        image: bitnami/kubectl:latest
+        image: argoproj/argo-rollouts:v1.5.0
         command: ["/bin/sh", "-c"]
         args:
           - |
@@ -19,7 +19,7 @@ spec:
             while true; do
               status=$(kubectl argo rollouts status $ROLLOUT_NAME -n $NAMESPACE)
               echo "$status"
-              if [[ $status == *"Healthy"* ]]; then
+              if echo "$status" | grep -q "Healthy"; then
                 curl -X POST $EVENT_SOURCE_URL -H "Content-Type: application/json" -d '{"status":"success"}'
                 break
               fi
