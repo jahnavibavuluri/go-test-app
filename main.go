@@ -16,6 +16,7 @@ var toolboxes = []string{
     "MATLAB Compiler",
     "MATLAB Compiler SDK",
     "CI/CD For Simulink Test",
+    "Another toolbox",
 }
 
 func main() {
