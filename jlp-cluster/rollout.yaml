@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
-  name: go-test-app
+  name: go-test-app-jlp
   namespace: default
 spec:
   replicas: 3
@@ -14,14 +14,14 @@ spec:
       - pause: {duration: 30s}
   selector:
     matchLabels:
-      app: go-test-app
+      app: go-test-app-jlp
   template:
     metadata:
       labels:
-        app: go-test-app
+        app: go-test-app-jlp
     spec:
       containers:
-      - name: go-test-app
+      - name: go-test-app-jlp
         image: jbavuluri/go-test-app:2.3
         ports:
         - containerPort: 8080
