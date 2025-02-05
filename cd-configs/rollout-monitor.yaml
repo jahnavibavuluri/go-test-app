@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
       - name: rollout-monitor
-        image: argoproj/argo-rollouts:v1.5.0
+        image: argoproj/argo-rollouts:latest
         command: ["/bin/sh", "-c"]
         args:
           - |
