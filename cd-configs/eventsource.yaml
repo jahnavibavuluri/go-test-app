@@ -2,7 +2,9 @@ apiVersion: argoproj.io/v1alpha1
 kind: EventSource
 metadata:
   name: rollout-events
+  namespace: argo-events
 spec:
+  eventBusName: default
   service:
     ports:
       - port: 12000
@@ -11,3 +13,4 @@ spec:
     rollout-success:
       endpoint: /rollout-success
       method: POST
+      port: "12000"
