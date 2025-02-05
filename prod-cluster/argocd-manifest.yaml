@@ -1,16 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: toolboxes-kind
+  name: toolboxes-prod-cluster
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: 'https://github.com/jahnavibavuluri/go-test-app.git'
     targetRevision: HEAD
-    path: kind
+    path: prod-cluster
   destination:
-    server: 'https://127.0.0.1:33755'
+    server: 'https://kubernetes.default.svc'
     namespace: default
   syncPolicy:
     automated: {}
