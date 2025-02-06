@@ -13,5 +13,5 @@ data:
             "app": "{{app.metadata.name}}"
           }
   trigger.prod-webhook-trigger: |
-    - when: app.status.operationState.phase in ['Succeeded']
+    - when: app.status.conditions[?(@.type=="Completed")].status == "True" && app.status.phase == "Healthy"
       send: [prod-webhook-template]
