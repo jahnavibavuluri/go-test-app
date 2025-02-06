@@ -4,6 +4,8 @@ metadata:
   name: rollout-sensor
   namespace: argo-events
 spec:
+  template:
+    serviceAccountName: operate-workflow-sa
   dependencies:
     - name: rollout-dep
       eventSourceName: rollout-events
