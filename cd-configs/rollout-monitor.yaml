@@ -9,7 +9,7 @@ spec:
       containers:
       - name: rollout-monitor
         image: argoproj/argo-rollouts:latest
-        command: ["/bin/sh", "-c"]
+        command: ["/bin/bash", "-c"]  # Assuming /bin/bash is available
         args:
           - |
             ROLLOUT_NAME="go-test-app-jlp"
