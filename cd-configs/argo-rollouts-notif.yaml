@@ -9,3 +9,15 @@ data:
     headers:
     - name: Content-Type
       value: application/json
+  template.prod-webhook-template: |
+    webhook:
+      prod-webhook:
+        method: POST
+        body: |
+          {
+            "message": "Rollout Succeeded",
+            "app": "{{app.metadata.name}}"
+          }
+  trigger.on-rollout-completed: |
+   - send: [prod-webhook-template]
+
