@@ -4,7 +4,7 @@ metadata:
   name: argo-rollouts-notification-configmap
 data:
   service.webhook.prod-webhook: |
-    url: http://argo-events-svc.argo-events.svc.cluster.local:12000
+    url: http://rollout-events-eventsource-svc.argo-events.svc.cluster.local:12000/rollout-success
     method: POST
     headers:
     - name: Content-Type
