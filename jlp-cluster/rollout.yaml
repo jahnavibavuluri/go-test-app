@@ -24,6 +24,6 @@ spec:
     spec:
       containers:
       - name: go-test-app-jlp
-        image: jbavuluri/go-test-app:2.3
+        image: jbavuluri/go-test-app:2.6
         ports:
         - containerPort: 8080

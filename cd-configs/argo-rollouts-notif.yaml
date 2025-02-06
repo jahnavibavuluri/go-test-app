@@ -14,8 +14,7 @@ data:
         method: POST
         body: |
           {
-            "message": "Rollout Succeeded",
-            "app": "{{app.metadata.name}}"
+            "key": "value"
           }
   trigger.on-rollout-completed: |
     - send: [prod-webhook-template]
