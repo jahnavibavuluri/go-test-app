@@ -18,14 +18,12 @@ spec:
           version: v1alpha1
           resource: workflows
           operation: submit
-          namespace: argo
           source:
             resource:
               apiVersion: argoproj.io/v1alpha1
               kind: Workflow
               metadata:
                 generateName: simple-test-workflow
-                namespace: argo
               spec:
                 entrypoint: main
                 templates:
