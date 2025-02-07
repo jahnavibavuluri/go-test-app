@@ -25,6 +25,7 @@ spec:
               kind: Workflow
               metadata:
                 generateName: simple-test-workflow
+                namespace: argo
               spec:
                 entrypoint: main
                 templates:
