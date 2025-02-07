@@ -16,5 +16,6 @@ data:
           {
             "key": "value"
           }
-  trigger.on-rollout-completed: |
-    - send: [prod-webhook-template]
+  trigger.prod-webhook-trigger: |
+    - when: app.status.conditions[?(@.type=="Completed")].status == "True" && app.status.phase == "Healthy"
+      send: [prod-webhook-template]
