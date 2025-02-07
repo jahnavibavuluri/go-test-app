@@ -43,12 +43,11 @@ spec:
                           mountPath: /root/.ssh
                       source: |
                         set -e
-                        echo "Configuring SSH..."
-                        chmod 600 /root/.ssh/id_ed25519
 
                         echo "Cloning the Git repository..."
                         # Clone the repository
-                        git clone https://github.com/jahnavibavuluri/go-test-app.git
+                        GIT_SSH_COMMAND="ssh -i /root/.ssh/id_ed25519 -o StrictHostKeyChecking=no" git clone git@github.com:jahnavibavuluri/go-test-app.git
+                        
                         cd go-test-app
 
                         echo "Extracting the image from jlp-cluster/rollout.yaml..."
@@ -69,6 +68,6 @@ spec:
                         git commit -m "Update image in prod-cluster/rollout.yaml to $IMAGE"
 
                         echo "Pushing changes to repository"
-                        git push origin main
+                        GIT_SSH_COMMAND="ssh -i /root/.ssh/id_ed25519 -o StrictHostKeyChecking=no" git push origin main
 
                         echo "Workflow completed successfully!"
