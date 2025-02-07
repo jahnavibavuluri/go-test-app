@@ -31,6 +31,17 @@ spec:
                     script:
                       image: alpine/git
                       command: ["/bin/sh"]
+                      env:
+                        - name: GIT_USERNAME
+                          valueFrom:
+                            secretKeyRef:
+                              name: github-credentials
+                              key: username
+                        - name: GIT_PASSWORD
+                          valueFrom:
+                            secretKeyRef:
+                              name: github-credentials
+                              key: password
                       source: |
                         set -e
                         echo "Cloning the Git repository..."
@@ -56,6 +67,6 @@ spec:
                         git commit -m "Update image in prod-cluster/rollout.yaml to $IMAGE"
 
                         echo "Pushing changes to repository"
-                        git push https://jahnavibavuluri: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@github.com/jahnavibavuluri/go-test-app.git main
+                        git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/jahnavibavuluri/go-test-app.git main
 
                         echo "Workflow completed successfully!"
