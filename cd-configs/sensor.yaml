@@ -26,6 +26,13 @@ spec:
                 generateName: update-rollout-
               spec:
                 entrypoint: update-image
+                volumes:
+                  - name: ssh-key-volume
+                    secret:
+                      secretName: github-ssh-key
+                      items:
+                        - key: ssh-privatekey
+                          path: id_ed25519
                 templates:
                   - name: update-image
                     script:
@@ -65,11 +72,3 @@ spec:
                         git push origin main
 
                         echo "Workflow completed successfully!"
-                      volume:
-                        - name: ssh-key-volume
-                          secret:
-                            secretName: github-ssh-key
-                            items:
-                              - key: ssh-privatekey
-                                path: id_ed25519
-
