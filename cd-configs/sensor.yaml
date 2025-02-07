@@ -31,19 +31,14 @@ spec:
                     script:
                       image: alpine/git
                       command: ["/bin/sh"]
-                      env:
-                        - name: GIT_USERNAME
-                          valueFrom:
-                            secretKeyRef:
-                              name: github-credentials
-                              key: username
-                        - name: GIT_PASSWORD
-                          valueFrom:
-                            secretKeyRef:
-                              name: github-credentials
-                              key: password
+                      volumeMounts:
+                        - name: ssh-key-volume
+                          mountPath: /root/.ssh
                       source: |
                         set -e
+                        echo "Configuring SSH..."
+                        chmod 600 /root/.ssh/id_ed25519
+
                         echo "Cloning the Git repository..."
                         # Clone the repository
                         git clone https://github.com/jahnavibavuluri/go-test-app.git
@@ -67,6 +62,14 @@ spec:
                         git commit -m "Update image in prod-cluster/rollout.yaml to $IMAGE"
 
                         echo "Pushing changes to repository"
-                        git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/jahnavibavuluri/go-test-app.git main
+                        git push origin main
 
                         echo "Workflow completed successfully!"
+                      volume:
+                        - name: ssh-key-volume
+                          secret:
+                            secretName: github-ssh-key
+                            items:
+                              - key: ssh-privatekey
+                                path: id_ed25519
+
