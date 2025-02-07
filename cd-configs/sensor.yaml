@@ -23,12 +23,6 @@ spec:
               apiVersion: argoproj.io/v1alpha1
               kind: Workflow
               metadata:
-                generateName: simple-test-workflow
+                generateName: update-rollout-
               spec:
-                entrypoint: main
-                templates:
-                - name: main
-                  container:
-                    image: alpine
-                    command: ["/bin/sh", "-c"]
-                    args: ["echo 'workflow triggered successfully'"]
+                entrypoint: update-image

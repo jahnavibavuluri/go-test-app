@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: update-rollout-
+spec:
+  entrypoint: update-image
+  templates:
+  - name: update-image
+    script:
+      image: alpine/git
+      command: ["/bin/sh"]
+      source: |
+        set -e
+        echo "Cloning the Git repository..."
+        # Clone the repository
+        git clone https://github.com/jahnavibavuluri/go-test-app.git
+        cd go-test-app
+
+        echo "Extracting the image from jlp-cluster/rollout.yaml..."
+        # Extract the image from jlp-cluster/rollout.yaml
+        IMAGE=$(grep 'image:' jlp-cluster/rollout.yaml | awk '{print $2}')
+
+        echo "Updating the image in prod-cluster/rollout.yaml..."
+        # Update the image in prod-cluster/rollout.yaml
+        sed -i "s|image: .*|image: $IMAGE|" prod-cluster/rollout.yaml
+
+        echo "Configuring Git user..."
+        # Commit and push changes
+        git config --global user.email "jbavuluri@gmail.com"
+        git config --global user.name "jahnavibavuluri"
+
+        echo "Committing changes..."
+        git add prod-cluster/rollout.yaml
+        git commit -m "Update image in prod-cluster/rollout.yaml to $IMAGE"
+
+        echo "Pushing changes to repository"
+        git push origin main
+
+        echo" Workflow completed successfully!"
