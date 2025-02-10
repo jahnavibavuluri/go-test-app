@@ -14,7 +14,6 @@ var toolboxes = []string{
     "Computer Vision Toolbox",
     "Instrument Control Toolbox",
     "MATLAB Compiler",
-    "MATLAB Compiler SDK",
 }
 
 func main() {
