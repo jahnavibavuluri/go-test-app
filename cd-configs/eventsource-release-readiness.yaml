@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: EventSource
+metadata:
+  name: git-event-source
+  namespace: argo-events
+spec:
+  eventBusName: default
+  service:
+    ports:
+      - name: release-readiness
+        port: 12001
+        targetPort: 12001
+  github:
+    release-readiness:
+      repositories:
+        - owner: jahnavibavuluri
+          names:
+            - go-test-app
+      webhook:
+        endpoint: /push
+        port: "12001"
+        method: POST
+        url: http://10.110.147.244:12001/push
+      events:
+        - "*"
+      insecure: true
+      active: true
+      contentType: json 
