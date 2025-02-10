@@ -5,22 +5,15 @@ metadata:
   namespace: argo-events
 spec:
   eventBusName: default
-  service:
-    ports:
-      - name: release-readiness
-        port: 12001
-        targetPort: 12001
   github:
     release-readiness:
-      repositories:
-        - owner: jahnavibavuluri
-          names:
-            - go-test-app
+      owner: jahnavibavuluri
+      repository: go-test-app
       webhook:
         endpoint: /push
         port: "12001"
         method: POST
-        url: http://10.110.147.244:12001/push
+        url: http://jlpminikube.local/push
       events:
         - "*"
       insecure: true

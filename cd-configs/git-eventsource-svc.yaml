@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: git-event-source-svc
+  namespace: argo-events
+spec:
+  selector:
+    eventsource-name: git-event-source
+  ports:
+    - port: 12001
+      targetPort: 12001
+      protocol: TCP
+  type: ClusterIP

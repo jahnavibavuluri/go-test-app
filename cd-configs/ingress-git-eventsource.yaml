@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: git-event-source-ingress
+  namespace: argo-events
+spec:
+  rules:
+  - host: jlpminikube.local
+    http:
+      paths:
+      - path: /push
+        pathType: Prefix
+        backend:
+          service:
+            name: git-event-source-svc
+            port:
+              number: 12001
