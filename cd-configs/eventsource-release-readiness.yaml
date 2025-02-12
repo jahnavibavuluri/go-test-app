@@ -17,7 +17,7 @@ spec:
         - "*"
       filter:
         expression: |
-          any(body.commits, {any(it.modified, { # == "jlp-cluster/rollout.yaml" }) })
+          any(body.commits, {any(#.modified, { # == "jlp-cluster/rollout.yaml" })})
       insecure: true
       active: true
       contentType: json 
