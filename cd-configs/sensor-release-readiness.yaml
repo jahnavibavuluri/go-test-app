@@ -29,14 +29,14 @@ spec:
                 templates:
                   - name: rr-checks
                     retryStrategy:
-                      limit: "3"
+                      limit: "2"
                     steps:
                       - - name: rr-check-1
                           template: rr-check
                           arguments:
                             parameters:
                               - name: url
-                                value: "https://www.google.com"
+                                value: "https://7af9-144-212-5-9.ngrok-free.app/test"
                         - name: rr-check-2
                           template: rr-check
                           arguments:
