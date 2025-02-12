@@ -13,7 +13,6 @@ spec:
         endpoint: /push
         port: "12001"
         method: POST
-        url: http://jlpminikube.local/push
       events:
         - "*"
       insecure: true
