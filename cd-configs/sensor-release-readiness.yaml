@@ -25,7 +25,7 @@ spec:
               metadata:
                 generateName: git-triggered-release-readiness-workflow-
               spec:
-                entrypoint: rr-checks  # Ensure this matches the template name
+                entrypoint: rr-checks  
                 templates:
                   - name: rr-checks
                     retryStrategy:
@@ -42,7 +42,9 @@ spec:
                           arguments:
                             parameters:
                               - name: url
-                                value: "https://www.jetbrains.com/teamcity"
+                                value: "https://github.com"
+                      - - name: argo-sync
+                          template: argo-cd-sync
                   - name: rr-check
                     inputs:
                       parameters:
@@ -51,3 +53,11 @@ spec:
                       image: curlimages/curl
                       command: ["/bin/sh", "-c"]
                       args: ["curl -s -o /dev/null -w \"%{http_code}\" {{inputs.parameters.url}} | grep 200"]
+                  - name: argo-cd-sync
+                    container:
+                      image: argoproj/argocd:latest
+                      command: ["/bin/sh", "-c"]
+                      args:
+                        - |
+                          argocd login argocd-server.argocd.svc --username admin --password dXZIZ5isRj5IIPcJ --insecure
+                          argocd app sync toolboxes-jlp-cluster
