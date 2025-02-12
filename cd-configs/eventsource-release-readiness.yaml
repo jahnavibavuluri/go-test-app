@@ -15,6 +15,9 @@ spec:
         method: POST
       events:
         - "*"
+      filter:
+        expression: |
+          contains(body.commits[0].modified, 'jlp-cluster/rollout.yaml')
       insecure: true
       active: true
       contentType: json 
