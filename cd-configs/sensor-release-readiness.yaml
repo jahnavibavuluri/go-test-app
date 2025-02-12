@@ -37,7 +37,7 @@ spec:
                             parameters:
                               - name: url
                                 value: "https://www.google.com"
-                      - - name: rr-check-2
+                        - name: rr-check-2
                           template: rr-check
                           arguments:
                             parameters:
