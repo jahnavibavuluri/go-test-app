@@ -17,7 +17,7 @@ spec:
         - "*"
       filter:
         expression: |
-          contains(body.commits[0].modified, 'jlp-cluster/rollout.yaml')
+          any(body.commits, { find(it.modified, { # == "jlp-cluster/rollout.yaml" }) != nil })
       insecure: true
       active: true
       contentType: json 
