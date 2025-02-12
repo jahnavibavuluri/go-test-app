@@ -6,7 +6,7 @@ import (
 )
 
 var toolboxes = []string{
-    "Signal Processing Toolbox",
+    "Processing Toolbox",
     "Optimization Toolbox",
     "Deep Learning Toolbox",
     "Image Acquisition Toolbox",
