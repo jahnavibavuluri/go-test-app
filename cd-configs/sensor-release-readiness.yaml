@@ -36,7 +36,7 @@ spec:
                           arguments:
                             parameters:
                               - name: url
-                                value: "https://8fd7-144-212-5-9.ngrok-free.app/test"
+                                value: "https://daf0-144-212-5-9.ngrok-free.app/test"
                         - name: rr-check-2
                           template: rr-check
                           arguments:
