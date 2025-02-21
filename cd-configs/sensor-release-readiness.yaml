@@ -36,7 +36,7 @@ spec:
                           arguments:
                             parameters:
                               - name: url
-                                value: "https://5d10-144-212-5-9.ngrok-free.app/test"
+                                value: "https://396e-144-212-5-9.ngrok-free.app/test"
                         - name: rr-check-2
                           template: rr-check
                           arguments:
@@ -45,6 +45,8 @@ spec:
                                 value: "https://github.com"
                       - - name: argo-sync
                           template: argo-cd-sync
+                      - - name: argo-rollout-status-check
+                          template: argo-rollout-status
                   - name: rr-check
                     inputs:
                       parameters:
@@ -61,3 +63,20 @@ spec:
                         - |
                           argocd login argocd-server.argocd.svc --username admin --password dXZIZ5isRj5IIPcJ --insecure
                           argocd app sync toolboxes-jlp-cluster
+                  - name: argo-rollout-status
+                    container:
+                      image: argoproj/argo-rollouts:latest
+                      command: ["/bin/sh", "-c"]
+                      args:
+                        - |
+                          echo "Waiting for the rollout to start progressing..."
+                          until kubectl argo rollouts status go-test-app-jlp --namespace default | grep "Progressing"; do
+                            sleep 5
+                          done
+                          echo "Rollout is progressing..."
+
+                          echo "Waiting for rollout to become healthy..."
+                          until kubectl argo rollouts status go-test-app-jlp --namespace default | grep "Healthy"; do
+                            sleep 5
+                          done
+                          echo "Rollout is healthy"
