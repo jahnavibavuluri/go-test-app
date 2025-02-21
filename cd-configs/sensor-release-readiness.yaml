@@ -70,7 +70,7 @@ spec:
                       args:
                         - |
                           # Install bash, curl, etc
-                          # apk add --no-cache bash curl
+                          apk add --no-cache bash curl
 
                           # Download Argo Rollouts CLI
                           curl -LO https://github.com/argoproj/argo-rollouts/releases/latest/download/kubectl-argo-rollouts-linux-amd64 && \
