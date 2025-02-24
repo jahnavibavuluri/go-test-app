@@ -77,6 +77,6 @@ spec:
                         git commit -m "Update image in prod-cluster/rollout.yaml to $IMAGE"
 
                         echo "Pushing changes to repository"
-                        git push origin main
+                        # git push origin main
 
                         echo "Workflow completed successfully!"

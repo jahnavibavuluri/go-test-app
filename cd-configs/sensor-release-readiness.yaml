@@ -25,7 +25,14 @@ spec:
               metadata:
                 generateName: git-triggered-release-readiness-workflow-
               spec:
-                entrypoint: rr-checks  
+                entrypoint: rr-checks
+                volumes:
+                  - name: ssh-key-volume
+                    secret:
+                      secretName: github-ssh-key
+                      items:
+                        - key: ssh-privatekey
+                          path: id_ed25519
                 templates:
                   - name: rr-checks
                     retryStrategy:
@@ -47,6 +54,8 @@ spec:
                           template: argo-cd-sync
                       - - name: argo-rollout-status-check
                           template: argo-rollout-status
+                      - - name: update-image
+                          template: update-image
                   - name: rr-check
                     inputs:
                       parameters:
@@ -69,14 +78,6 @@ spec:
                       command: ["/bin/sh", "-c"]
                       args:
                         - |
-                          # Install curl
-                          # apt-get update && apt-get install -y curl
-
-                          # Download Argo Rollouts CLI
-                          #curl -LO https://github.com/argoproj/argo-rollouts/releases/latest/download/kubectl-argo-rollouts-linux-amd64 && \
-                          #chmod +x ./kubectl-argo-rollouts-linux-amd64 && \
-                          #mv ./kubectl-argo-rollouts-linux-amd64 /usr/local/bin/kubectl-argo-rollouts
-
                           echo "Waiting for the rollout to start progressing..."
                           until kubectl argo rollouts status go-test-app-jlp --namespace default | grep "Progressing"; do
                             sleep 5
@@ -88,3 +89,49 @@ spec:
                             sleep 5
                           done
                           echo "Rollout is healthy"
+                  - name: update-image
+                    script:
+                      image: alpine/git
+                      command: ["/bin/sh"]
+                      volumeMounts:
+                        - name: ssh-key-volume
+                          mountPath: /root/.ssh
+                      source: |
+                        set -e
+                        # Copy the SSH key to a writable location with the correct permissions
+                        cp /root/.ssh/id_ed25519 /tmp/id_ed25519
+                        chmod 600 /tmp/id_ed25519
+
+                        # Optionally add GitHub to known_hosts to avoid host key verification
+                        ssh-keyscan -H github.com >> /tmp/known_hosts
+
+                        # Set the GIT_SSH_COMMAND once for all Git operations
+                        export GIT_SSH_COMMAND="ssh -i /tmp/id_ed25519 -o UserKnownHostsFile=/tmp/known_hosts -o StrictHostKeyChecking=no"
+
+                        echo "Cloning the Git repository..."
+                        # Clone the repository
+                        git clone git@github.com:jahnavibavuluri/go-test-app.git
+
+                        cd go-test-app
+
+                        echo "Extracting the image from jlp-cluster/rollout.yaml..."
+                        # Extract the image from jlp-cluster/rollout.yaml
+                        IMAGE=$(grep 'image:' jlp-cluster/rollout.yaml | awk '{print $2}')
+
+                        echo "Updating the image in prod-cluster/rollout.yaml..."
+                        # Update the image in prod-cluster/rollout.yaml
+                        sed -i "s|image: .*|image: $IMAGE|" prod-cluster/rollout.yaml
+
+                        echo "Configuring Git user..."
+                        # Commit and push changes
+                        git config --global user.email "jbavuluri@gmail.com"
+                        git config --global user.name "jahnavibavuluri"
+
+                        echo "Committing changes..."
+                        git add prod-cluster/rollout.yaml
+                        git commit -m "Update image in prod-cluster/rollout.yaml to $IMAGE"
+
+                        echo "Pushing changes to repository"
+                        git push origin main
+
+                        echo "Workflow completed successfully!"
