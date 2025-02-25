@@ -50,13 +50,13 @@ spec:
                             parameters:
                               - name: url
                                 value: "https://github.com"
-                      - - name: argo-sync
+                      - - name: argocd-sync-to-jlp-cluster
                           template: argo-cd-sync
-                      - - name: argo-rollout-status-check
+                      - - name: argo-rollout-status-check-jlp-cluster
                           template: argo-rollout-status
-                      - - name: update-image
+                      - - name: update-image-to-prod
                           template: update-image
-                      - - name: argo-sync-prod
+                      - - name: argocd-sync-to-prod-cluster
                           template: argo-cd-sync-prod
                       - - name: argo-rollout-status-check-prod-cluster
                           template: argo-rollout-status-check-prod-cluster
