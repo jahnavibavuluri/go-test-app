@@ -43,7 +43,7 @@ spec:
                           arguments:
                             parameters:
                               - name: url
-                                value: "https://2599-144-212-5-9.ngrok-free.app/test"
+                                value: "https://51bb-144-212-5-9.ngrok-free.app/test"
                         - name: rr-check-2
                           template: rr-check
                           arguments:
@@ -56,6 +56,8 @@ spec:
                           template: argo-rollout-status
                       - - name: update-image
                           template: update-image
+                      - - name: argo-sync-prod
+                          template: argo-cd-sync-prod
                   - name: rr-check
                     inputs:
                       parameters:
@@ -135,3 +137,11 @@ spec:
                         git push origin main
 
                         echo "Workflow completed successfully!"
+                  - name: argo-cd-sync-prod
+                    container:
+                      image: argoproj/argocd:latest
+                      command: ["/bin/sh", "-c"]
+                      args:
+                        - |
+                          argocd login argocd-server.argocd.svc --username admin --password dXZIZ5isRj5IIPcJ --insecure
+                          argocd app sync toolboxes-prod-cluster
