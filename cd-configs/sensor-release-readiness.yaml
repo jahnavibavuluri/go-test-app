@@ -58,6 +58,8 @@ spec:
                           template: update-image
                       - - name: argo-sync-prod
                           template: argo-cd-sync-prod
+                      - - name: argo-rollout-status-check-prod-cluster
+                          template: argo-rollout-status-check-prod-cluster
                   - name: rr-check
                     inputs:
                       parameters:
@@ -145,3 +147,20 @@ spec:
                         - |
                           argocd login argocd-server.argocd.svc --username admin --password dXZIZ5isRj5IIPcJ --insecure
                           argocd app sync toolboxes-prod-cluster
+                  - name: argo-rollout-status-check-prod-cluster
+                    container:
+                      image: jbavuluri/argo-rollouts-custom-image:latest
+                      command: ["/bin/sh", "-c"]
+                      args:
+                        - |
+                          echo "Waiting for the rollout to start progressing..."
+                          until kubectl argo rollouts status go-test-app --namespace default | grep "Progressing"; do
+                            sleep 5
+                          done
+                          echo "Rollout is progressing..."
+
+                          echo "Waiting for rollout to become healthy..."
+                          until kubectl argo rollouts status go-test-app --namespace default | grep "Healthy"; do
+                            sleep 5
+                          done
+                          echo "Rollout is healthy"
