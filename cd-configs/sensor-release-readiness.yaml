@@ -51,9 +51,7 @@ spec:
                               - name: url
                                 value: "https://github.com"
                       - - name: argocd-sync-to-jlp-cluster
-                          template: argo-cd-sync
-                      - - name: argo-rollout-status-check-jlp-cluster
-                          template: argo-rollout-status
+                          template: argo-cd-sync-rollout-status
                       - - name: update-image-to-prod
                           template: update-image
                       - - name: argocd-sync-to-prod-cluster
@@ -68,6 +66,12 @@ spec:
                       image: curlimages/curl
                       command: ["/bin/sh", "-c"]
                       args: ["curl -s -o /dev/null -w \"%{http_code}\" {{inputs.parameters.url}} | grep 200"]
+                  - name: argo-cd-sync-rollout-status
+                    steps:
+                      - - name: sync-to-jlp
+                          template: argo-cd-sync
+                      - - name: rollout-status-jlp
+                          template: argo-rollout-status
                   - name: argo-cd-sync
                     container:
                       image: argoproj/argocd:latest
