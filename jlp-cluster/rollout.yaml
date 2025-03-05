@@ -12,6 +12,9 @@ spec:
       steps:
       - setWeight: 20
       - pause: {duration: 30s}
+      - analysis:
+          templates:
+          - templateName: smoke-test-analysis
       - setWeight: 50
       - pause: {duration: 30s}
   selector:
@@ -27,3 +30,19 @@ spec:
         image: jbavuluri/go-test-app:2.6
         ports:
         - containerPort: 8080
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: smoke-test-analysis
+spec:
+  metrics:
+    - name: smoke-test
+      successCondition: result == "200"
+      provider:
+        web:
+          url: https://c79f-144-212-5-9.ngrok-free.app/smoke_test
+          method: GET
+
