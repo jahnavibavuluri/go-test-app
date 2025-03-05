@@ -92,11 +92,20 @@ spec:
                           done
                           echo "Rollout is progressing..."
 
-                          echo "Waiting for rollout to become healthy..."
-                          until kubectl argo rollouts status go-test-app-jlp --namespace default | grep "Healthy"; do
-                            sleep 5
+                          echo "Monitoring rollout status..."
+                          while true; do
+                            STATUS=$(kubectl argo rollouts status go-test-app-jlp --namespace default)
+                            if echo "$STATUS" | grep -q "Healthy"; then
+                              echo "Rollout is healthy"
+                              break
+                            elif echo "$STATUS" | grep -q "Degraded"; then
+                              echo "Rollout is degraded, stopping workflow"
+                              exit 1
+                            else
+                              echo "Rollout status: $STATUS"
+                              sleep 5
+                            fi
                           done
-                          echo "Rollout is healthy"
                   - name: update-image
                     script:
                       image: alpine/git
