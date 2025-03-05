@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: go-test-app-jlp
-        image: jbavuluri/go-test-app:2.6
+        image: jbavuluri/go-test-app:2.4
         ports:
         - containerPort: 8080
 
@@ -39,7 +39,7 @@ metadata:
   name: smoke-test-analysis
 spec:
   metrics:
-    - name: smoke-test
+    - name: smoke-test-analysis
       successCondition: result == "200"
       provider:
         web:
