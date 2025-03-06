@@ -78,6 +78,11 @@ spec:
                       command: ["/bin/sh", "-c"]
                       args:
                         - |
+                          set -e
+
+                          echo "installing jq"
+                          apk add --no-cache jq
+
                           argocd login argocd-server.argocd.svc --username admin --password dXZIZ5isRj5IIPcJ --insecure
                           argocd app sync toolboxes-jlp-cluster
 
