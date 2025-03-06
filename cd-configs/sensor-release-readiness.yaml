@@ -72,8 +72,6 @@ spec:
                         - name: rollout-status-jlp
                           template: argo-rollout-status
                           dependencies: [sync-to-jlp]
-                          retryStrategy:
-                            restartPolicy: Always
                   - name: argo-cd-sync
                     container:
                       image: argoproj/argocd:latest
