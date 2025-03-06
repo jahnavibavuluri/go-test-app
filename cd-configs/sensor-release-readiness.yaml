@@ -79,7 +79,7 @@ spec:
                           argocd login argocd-server.argocd.svc --username admin --password dXZIZ5isRj5IIPcJ --insecure
                           
                           echo "Waiting a few seconds for changes to propogate..."
-                          sleep 10
+                          sleep 20
 
                           echo "Checking for changes in ArgoCD application..."
                           argocd app diff toolboxes-jlp-cluster
