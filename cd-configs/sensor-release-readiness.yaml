@@ -65,11 +65,13 @@ spec:
                       command: ["/bin/sh", "-c"]
                       args: ["curl -s -o /dev/null -w \"%{http_code}\" {{inputs.parameters.url}} | grep 200"]
                   - name: argo-cd-sync-rollout-status
-                    steps:
-                      - - name: sync-to-jlp
+                    dag:
+                      tasks:
+                        - name: sync-to-jlp
                           template: argo-cd-sync
-                      - - name: rollout-status-jlp
+                        - name: rollout-status-jlp
                           template: argo-rollout-status
+                          dependencies: [sync-to-jlp]
                   - name: argo-cd-sync
                     container:
                       image: argoproj/argocd:latest
