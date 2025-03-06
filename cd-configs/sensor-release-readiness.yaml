@@ -67,63 +67,18 @@ spec:
                   - name: argo-cd-sync-rollout-status
                     dag:
                       tasks:
-                        - name: sync-to-jlp
-                          template: argo-cd-sync
                         - name: rollout-status-jlp
                           template: argo-rollout-status
-                          dependencies: [sync-to-jlp]
-                  - name: argo-cd-sync
-                    container:
-                      image: argoproj/argocd:latest
-                      command: ["/bin/sh", "-c"]
-                      args:
-                        - |
-                          set -e
-
-                          echo "installing jq"
-                          apk add --no-cache jq
-
-                          argocd login argocd-server.argocd.svc --username admin --password dXZIZ5isRj5IIPcJ --insecure
-                          argocd app sync toolboxes-jlp-cluster
-
-                          get_health_status() {
-                            argocd app get toolboxes-jlp-cluster -o json | jq -r '.status.health.status'
-                          }
-
-                          # Wait for the application to start progressing
-                          echo "Waiting for the application to start progressing..."
-                          while true; do
-                            STATUS=$(get_health_status)
-                            if [ "$STATUS" == "Progressing" ]; then
-                              echo "Application is progressing..."
-                              break
-                            else
-                              echo "Current status: $STATUS. Waiting..."
-                              sleep 5
-                            fi
-                          done
-
-                          # Wait for the application to become healthy or degraded
-                          echo "Monitoring application health status..."
-                          while true; do
-                            STATUS=$(get_health_status)
-                            if [ "$STATUS" == "Healthy" ]; then
-                              echo "Application is healthy. Sync successful."
-                              break
-                            elif [ "$STATUS" == "Degraded" ]; then
-                              echo "Application is degraded. Exiting with failure."
-                              exit 1
-                            else
-                              echo "Current status: $STATUS. Waiting..."
-                              sleep 5
-                            fi
-                          done
                   - name: argo-rollout-status
                     container:
                       image: jbavuluri/argo-rollouts-custom-image:latest
                       command: ["/bin/sh", "-c"]
                       args:
                         - |
+                          echo "Executing ArgoCD Sync..."
+                          argocd login argocd-server.argocd.svc --username admin --password dXZIZ5isRj5IIPcJ --insecure
+                          argocd app sync toolboxes-jlp-cluster
+
                           echo "Waiting for the rollout to start progressing..."
                           until kubectl argo rollouts status go-test-app-jlp --namespace default | grep "Progressing"; do
                             sleep 5
