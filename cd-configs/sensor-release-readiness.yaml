@@ -75,8 +75,13 @@ spec:
                       command: ["/bin/sh", "-c"]
                       args:
                         - |
-                          echo "Checking for changes in ArgoCD application..."
+                          echo "Logging into ArgoCD..."
                           argocd login argocd-server.argocd.svc --username admin --password dXZIZ5isRj5IIPcJ --insecure
+                          
+                          echo "Waiting a few seconds for changes to propogate..."
+                          sleep 10
+
+                          echo "Checking for changes in ArgoCD application..."
                           argocd app diff toolboxes-jlp-cluster
                           DIFF_EXIT_CODE=$?  # Capture the exit code of the previous command
 
