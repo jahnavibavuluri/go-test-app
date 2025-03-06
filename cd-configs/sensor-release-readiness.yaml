@@ -78,6 +78,9 @@ spec:
                           echo "Logging into ArgoCD..."
                           argocd login argocd-server.argocd.svc --username admin --password dXZIZ5isRj5IIPcJ --insecure
                           
+                          echo "Perfoming a hard refresh of ArgoCD application data..."
+                          argocd app get toolboxes-jlp-cluster --hard-refresh
+
                           echo "Waiting a few seconds for changes to propogate..."
                           sleep 20
 
