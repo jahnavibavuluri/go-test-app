@@ -75,9 +75,31 @@ spec:
                       command: ["/bin/sh", "-c"]
                       args:
                         - |
-                          echo "Executing ArgoCD Sync..."
+                          echo "Checking for changes in ArgoCD application..."
                           argocd login argocd-server.argocd.svc --username admin --password dXZIZ5isRj5IIPcJ --insecure
-                          argocd app sync toolboxes-jlp-cluster
+                          argocd app diff toolboxes-jlp-cluster
+                          DIFF_EXIT_CODE=$?  # Capture the exit code of the previous command
+
+                          if [ $DIFF_EXIT_CODE -eq 1 ]; then
+                            echo "Changes detected, performing ArgoCD sync for version B..."
+                            argocd app sync toolboxes-jlp-cluster
+                          elif [ $DIFF_EXIT_CODE -eq 0 ]; then
+                            echo "No changes detected, checking current rollout status..."
+                            CURRENT_STATUS=$(kubectl argo rollouts status go-test-app-jlp --namespace default --watch=false)
+
+                            if echo "$CURRENT_STATUS" | grep -q "Degraded"; then
+                              echo "Rollout is degraded. Retrying rollout..."
+                              kubectl argo rollouts retry rollout go-test-app-jlp --namespace default
+                            elif echo "$CURRENT_STATUS" | grep -q "Healthy"; then
+                              echo "Rollout is healthy. No action needed."
+                            else
+                              echo "Rollout is in an unexpected state: $CURRENT_STATUS"
+                              exit 1
+                            fi
+                          else
+                            echo "An error occurred while checking for changes."
+                            exit 1
+                          fi
 
                           echo "Waiting for the rollout to start progressing..."
                           until kubectl argo rollouts status go-test-app-jlp --namespace default | grep "Progressing"; do
