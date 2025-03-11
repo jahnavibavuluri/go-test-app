@@ -23,3 +23,18 @@ spec:
         image: jbavuluri/go-test-app:2.4
         ports:
         - containerPort: 8080
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: smoke-test-analysis
+spec:
+  metrics:
+    - name: smoke-test-analysis
+      successCondition: result == "200"
+      provider:
+        web:
+          url: https://c79f-144-212-5-9.ngrok-free.app/smoke_test
+          method: GET
