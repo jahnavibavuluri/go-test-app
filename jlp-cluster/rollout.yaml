@@ -6,17 +6,15 @@ metadata:
   annotations:
     notifications.argoproj.io/subscribe.on-rollout-completed.prod-webhook: ""
 spec:
-  replicas: 3
+  replicas: 2
   strategy:
     canary:
       steps:
       - setWeight: 20
-      - pause: {duration: 30s}
+      - pause: {duration: 10s}
       - analysis:
           templates:
           - templateName: smoke-test-analysis
-      - setWeight: 50
-      - pause: {duration: 30s}
   selector:
     matchLabels:
       app: go-test-app-jlp
@@ -27,7 +25,7 @@ spec:
     spec:
       containers:
       - name: go-test-app-jlp
-        image: jbavuluri/go-test-app:2.6
+        image: jbavuluri/go-test-app:2.4
         ports:
         - containerPort: 8080
 

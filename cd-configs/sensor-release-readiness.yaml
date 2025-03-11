@@ -82,7 +82,7 @@ spec:
                           argocd app get toolboxes-jlp-cluster --hard-refresh
 
                           echo "Waiting a few seconds for changes to propogate..."
-                          sleep 20
+                          sleep 10
 
                           echo "Checking for changes in ArgoCD application..."
                           argocd app diff toolboxes-jlp-cluster

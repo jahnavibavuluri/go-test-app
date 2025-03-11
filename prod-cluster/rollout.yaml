@@ -4,14 +4,12 @@ metadata:
   name: go-test-app
   namespace: default
 spec:
-  replicas: 3
+  replicas: 2
   strategy:
     canary:
       steps:
       - setWeight: 20
-      - pause: {duration: 30s}
-      - setWeight: 50
-      - pause: {duration: 30s}
+      - pause: {duration: 10s}
   selector:
     matchLabels:
       app: go-test-app
