@@ -10,6 +10,9 @@ spec:
       steps:
       - setWeight: 20
       - pause: {duration: 10s}
+      - analysis:
+          templates:
+          - templateName: smoke-test-analysis-prod
   selector:
     matchLabels:
       app: go-test-app
@@ -29,10 +32,10 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: AnalysisTemplate
 metadata:
-  name: smoke-test-analysis
+  name: smoke-test-analysis-prod
 spec:
   metrics:
-    - name: smoke-test-analysis
+    - name: smoke-test-analysis-prod
       successCondition: result == "200"
       provider:
         web:
