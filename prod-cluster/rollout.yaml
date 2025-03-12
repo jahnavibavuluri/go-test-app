@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: go-test-app
-        image: jbavuluri/go-test-app:2.4
+        image: jbavuluri/go-test-app:2.5
         ports:
         - containerPort: 8080
 
